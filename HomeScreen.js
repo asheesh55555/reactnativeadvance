@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { Button, View, Text } from 'react-native';
 
 export default class HomeScreen extends React.Component {
   render() {
@@ -9,6 +10,10 @@ export default class HomeScreen extends React.Component {
         <Button
           title="Go to Details1234"
           onPress={() => this.props.navigation.navigate('Details')}
+        />
+        <Button 
+          title="Restaurants"
+          onPress={() => this.props.navigation.navigate('ApiCall')}
         />
       </View>
     );
