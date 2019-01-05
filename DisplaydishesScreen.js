@@ -30,11 +30,66 @@ export default class DisplaydishesScreen extends React.Component {
 
 
 
-import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+// import React, { Component } from 'react';
+// import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+// import { createStackNavigator, createAppContainer, Button } from 'react-navigation';
+// import GridView from 'react-native-super-grid';
+// import Dialog, { DialogContent } from 'react-native-popup-dialog';
+
+
+
+
+
+import React, { Component } from "react";
+import { Text, TouchableOpacity, View, Button, StyleSheet, Image, FlatList } from "react-native";
+import Modal from "react-native-modal";
+import Dialog, { DialogContent } from 'react-native-popup-dialog';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 import GridView from 'react-native-super-grid';
 
+
+
 export default class DisplaydishesScreen extends Component {
+
+  _getAddons(){
+    this.setState({ visible: true });
+
+    return fetch('https://facebook.github.io/react-native/movies.json')
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          dataSource: responseJson.movies,
+        }, function(){
+
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+
+   }
+
+  //  componentDidMount(){
+  //   return fetch('https://facebook.github.io/react-native/movies.json')
+  //     .then((response) => response.json())
+  //     .then((responseJson) => {
+
+  //       this.setState({
+  //         dataSource: responseJson.movies,
+  //       }, function(){
+
+  //       });
+
+  //     })
+  //     .catch((error) =>{
+  //       console.error(error);
+  //     });
+  // }
+
+
+  state = {};
   render() {
     // Taken from https://flatuicolors.com/
     // const items = [
@@ -51,18 +106,58 @@ export default class DisplaydishesScreen extends Component {
     // ];
 
     return (
+      // <View>
+      //   <Text onPress={() => this.props.navigation.navigate('Addons')} > hiiiii</Text>
+      // </View>
       <GridView
         itemDimension={130}
         items={this.props.navigation.state.params.dishes}
         style={styles.gridView}
         renderItem={item => (
-          <View style={[styles.itemContainer, { backgroundColor: '#3498db' }]}>
-            <Image style={{width: 50, height: 50}}
-		          source={{uri: item.image}}
-		        />
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemCode}>{item.desc}</Text>
-          </View>
+           <TouchableOpacity  onPress={() => {this._getAddons()}}>
+              <View style={[styles.itemContainer, { backgroundColor: '#3498db' }]} >
+                <Image  style={{width: 50, height: 50}}
+    		          source={{uri: item.image}}
+    		        />
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemCode}>{item.desc}</Text>
+                <Dialog
+                visible={this.state.visible}
+                onTouchOutside={() => {
+                  this.setState({ visible: false });
+                }}
+              >
+                <DialogContent>
+                     <FlatList
+                      data={this.state.dataSource}
+                      renderItem={({item}) => <Text>{item.title}</Text>}
+                    />
+                      <View style={styles.alternativeLayoutButtonContainer}>
+                        <Button
+                          onPress={() => {
+                            this.setState({ visible: false });
+                          }}
+                          title="This looks great!"
+                        />
+                        <Button
+                          onPress={() => {
+                            this.setState({ visible: false });
+                          }}
+                          title="OK!"
+                          color="#841584"
+                        />
+                      </View>
+                </DialogContent>
+              </Dialog>
+
+              </View>
+
+             <View>
+
+             
+               
+             </View>
+          </TouchableOpacity>
         )}
       />
     );
@@ -70,6 +165,11 @@ export default class DisplaydishesScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  alternativeLayoutButtonContainer: {
+    margin: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
   gridView: {
     paddingTop: 25,
     flex: 1,

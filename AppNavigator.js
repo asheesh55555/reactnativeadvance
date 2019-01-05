@@ -6,6 +6,7 @@ import DetailsScreen from './DetailsScreen';
 import FetchExample from './FetchExample';
 import DisplayMenuScreen from './DisplayMenuScreen';
 import DisplaydishesScreen from './DisplaydishesScreen';
+import AddonsScreen from './AddonsScreen';
 
 const RootStack = createStackNavigator(
   {
@@ -14,6 +15,7 @@ const RootStack = createStackNavigator(
     ApiCall: FetchExample,
     DisplayMenu: DisplayMenuScreen,
     Displaydishes: DisplaydishesScreen,
+    Addons: AddonsScreen,
   },
   {
     initialRouteName: 'Home',
