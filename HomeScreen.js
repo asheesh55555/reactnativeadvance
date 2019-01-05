@@ -12,7 +12,7 @@ export default class HomeScreen extends React.Component {
           onPress={() => this.props.navigation.navigate('Details')}
         />
         <Button 
-          title="Restaurants"
+          title="Restaurant Menus"
           onPress={() => this.props.navigation.navigate('ApiCall')}
         />
       </View>
