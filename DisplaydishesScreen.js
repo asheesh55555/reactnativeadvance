@@ -50,16 +50,20 @@ import GridView from 'react-native-super-grid';
 
 
 export default class DisplaydishesScreen extends Component {
-
-  _getAddons(){
+  
+  constructor(props) {
+    super(props);
+    this.state = { visible: false };
+  }
+  _getAddons(dishId){
     this.setState({ visible: true });
 
-    return fetch('https://facebook.github.io/react-native/movies.json')
+    return fetch('http://test.curryheights.com/api/v1/dishes/'+dishId+'/addons')
       .then((response) => response.json())
       .then((responseJson) => {
 
         this.setState({
-          dataSource: responseJson.movies,
+          dataSource: responseJson.menu_addon_groups,
         }, function(){
 
         });
@@ -114,7 +118,7 @@ export default class DisplaydishesScreen extends Component {
         items={this.props.navigation.state.params.dishes}
         style={styles.gridView}
         renderItem={item => (
-           <TouchableOpacity  onPress={() => {this._getAddons()}}>
+           <TouchableOpacity  onPress={() => {this._getAddons(item.id)}}>
               <View style={[styles.itemContainer, { backgroundColor: '#3498db' }]} >
                 <Image  style={{width: 50, height: 50}}
     		          source={{uri: item.image}}
@@ -130,14 +134,15 @@ export default class DisplaydishesScreen extends Component {
                 <DialogContent>
                      <FlatList
                       data={this.state.dataSource}
-                      renderItem={({item}) => <Text>{item.title}</Text>}
+                      renderItem={({item}) => <Text>{item.name}, min item - {item.min_item}, max item - {item.max_item}</Text>}
+                      keyExtractor={(item, index) => index.toString()}
                     />
                       <View style={styles.alternativeLayoutButtonContainer}>
                         <Button
                           onPress={() => {
                             this.setState({ visible: false });
                           }}
-                          title="This looks great!"
+                          title="Cancel"
                         />
                         <Button
                           onPress={() => {
