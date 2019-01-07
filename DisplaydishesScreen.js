@@ -134,7 +134,20 @@ export default class DisplaydishesScreen extends Component {
                 <DialogContent>
                      <FlatList
                       data={this.state.dataSource}
-                      renderItem={({item}) => <Text>{item.name}, min item - {item.min_item}, max item - {item.max_item}</Text>}
+                      renderItem={({item}) => 
+                      
+
+
+                      <View>
+                          <Text style={styles.bigblue} >{item.name}</Text>  
+                          <FlatList
+                          data={item.items}
+                          renderItem={({item}) => <Text style={styles.addonmargin} >{item.name}</Text>}
+                          keyExtractor={(item, index) => index.toString()}
+                        />
+                      </View>
+                  
+                    }
                       keyExtractor={(item, index) => index.toString()}
                     />
                       <View style={styles.alternativeLayoutButtonContainer}>
@@ -170,6 +183,14 @@ export default class DisplaydishesScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+   addonmargin: {
+    margin: 10
+   },
+   bigblue: {
+    color: 'blue',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
   alternativeLayoutButtonContainer: {
     margin: 20,
     flexDirection: 'row',
