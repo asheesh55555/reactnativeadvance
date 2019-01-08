@@ -46,6 +46,7 @@ import Modal from "react-native-modal";
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import GridView from 'react-native-super-grid';
+import CheckBox from 'react-native-check-box'
 
 
 
@@ -54,6 +55,36 @@ export default class DisplaydishesScreen extends Component {
   constructor(props) {
     super(props);
     this.state = { visible: false };
+  }
+
+
+   _setaddoncheckboxstate(addon){
+    const update = {};
+    update['ischecked_' + addon.id] = false;
+    this.setState(update);
+
+   }
+
+   _setaddoncheckboxstate1(addon){
+    const update = {};
+    update['ischecked_' + addon.id] = !this.state['ischecked_' + addon.id];
+    this.setState(update);
+    console.log(!this.state['ischecked_' + addon.id], '********************************')
+   }
+
+  _getcheckbox(addon){
+    this._setaddoncheckboxstate(addon)
+
+    return(
+          <CheckBox
+              style={{flex: 1, padding: 10}}
+              onClick={()=>{
+               this._setaddoncheckboxstate1(addon)
+              }}
+              isChecked={this.state['ischecked_' + addon.id]}
+              leftText={"CheckBox"}
+          />
+      )
   }
   _getAddons(dishId){
     this.setState({ visible: true });
@@ -142,7 +173,14 @@ export default class DisplaydishesScreen extends Component {
                           <Text style={styles.bigblue} >{item.name}</Text>  
                           <FlatList
                           data={item.items}
-                          renderItem={({item}) => <Text style={styles.addonmargin} >{item.name}</Text>}
+                          renderItem={({item}) =>
+
+
+                            <View>
+                                {this._getcheckbox(item)}
+                                <Text style={styles.addonmargin} >{item.name}</Text>
+                            </View>
+                          }
                           keyExtractor={(item, index) => index.toString()}
                         />
                       </View>
