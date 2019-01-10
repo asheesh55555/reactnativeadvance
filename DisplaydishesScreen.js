@@ -9,7 +9,7 @@ import { ListItem } from 'react-native-elements';
 
 
 export default class DisplaydishesScreen extends Component {
-  
+  state = {};
   constructor(props) {
     super(props);
     this.state={
@@ -18,7 +18,7 @@ export default class DisplaydishesScreen extends Component {
     }
   }
    
-  isIconCheckedOrNot = (item,index) => {
+  isIconCheckedOrNot = (addonPrent, item, index) => {
     let selectedLists11 = this.state.selectedLists;
     let index1 = selectedLists11.indexOf(item.id)
     if(selectedLists11.includes(item.id)){
@@ -30,14 +30,20 @@ export default class DisplaydishesScreen extends Component {
     }
   }
 
+  finishAddonSelection = (addonsParents) => {
+    this.setModalVisible(!this.state.modalVisible)
+    let selectedLists22 = this.state.selectedLists;
+    console.log(addonsParents, 'aaaaaaaaaaaaaaa')
+  }
 
 
-  _renderListItem = ({item,index}) => {
+
+  _renderListItem = (parentData, {item,index}) => {
     return(            
       <View >
           <CheckBox
               isChecked={this.state.selectedLists.includes(item.id)}
-              onClick={() => this.isIconCheckedOrNot(item,index)}
+              onClick={() => this.isIconCheckedOrNot(parentData, item,index)}
           />
           <Text> 
            {item.name}
@@ -71,7 +77,7 @@ export default class DisplaydishesScreen extends Component {
 
    }
 
-  state = {};
+  
 
   render() {
     return (
@@ -86,49 +92,65 @@ export default class DisplaydishesScreen extends Component {
             />
           ))
         }
+        <ScrollView>
+          <Modal
+            style={{ margin: 10 }}
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+            }}>
+            <View style={{marginTop: 22}}>
+              <View>
+                <Text>Hello asheesh  World!</Text>
 
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-          }}>
-          <View style={{marginTop: 22}}>
-            <View>
-              <Text>Hello asheesh  World!</Text>
 
-              <TouchableHighlight
-                onPress={() => {
-                  this.setModalVisible(!this.state.modalVisible);
-                }}>
-                <Text>Hide asheesh Modal</Text>
-              </TouchableHighlight>
+                
 
-              <FlatList
-                data={this.state.dataSource}
-                extraData={this.state}
-                renderItem={({item}) => 
 
-                  <View>
-                    <Text style={styles.bigblue} >{item.name}</Text>  
-                    <FlatList
-                        data={item.items}
-                        renderItem={this._renderListItem}
-                        keyExtractor={(item,index) => item+index}
-                        showsVerticalScrollIndicator={false}
-                        alwaysBounceVertical
-                        extraData={this.state}
-                    />
-                  </View>
-                }
-                keyExtractor={(item, index) => index.toString()}
-              />
+                <FlatList
+                  data={this.state.dataSource}
+                  extraData={this.state}
+                  renderItem={({item}) => 
 
-              
+                    <View>
+                      <Text style={styles.bigblue} >{item.name}</Text>  
+                      <FlatList
+                          data={item.items}
+                          renderItem={this._renderListItem.bind(this, item)}
+                          keyExtractor={(item,index) => item+index}
+                          showsVerticalScrollIndicator={false}
+                          alwaysBounceVertical
+                          extraData={this.state}
+                      />
+
+                      
+                    </View>
+                    
+                  }
+                  keyExtractor={(item, index) => index.toString()}
+                />
+
+                <Button
+                  onPress={() => { this.finishAddonSelection(this.state.dataSource)}}
+                  title="OK"
+                  color="#841584"
+                  accessibilityLabel="Learn more about this purple button"
+                />
+
+
+                <Button
+                  onPress={() => { this.setModalVisible(!this.state.modalVisible)}}
+                  title="cancel"
+                  color="red"
+                  accessibilityLabel="Learn more about this purple button"
+                />
+
+              </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
+        </ScrollView>
         
       </ScrollView>
     );

@@ -1,54 +1,68 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import {View, Text } from 'react-native';
+import {View, Text, FlatList, TouchableOpacity } from 'react-native';
 import CheckBox from 'react-native-check-box'
 
-export default class DetailsScreen extends React.Component {
+class MyListItem extends React.PureComponent {
+  _onPress = () => {
+    this.props.onPressItem(this.props.id);
+  };
 
-	constructor(props) {
-    super(props);
-    this.state = { isChecked: false,
-                   isChecked1: false,
-                   isChecked2: false,  
-                                   };
+  render() {
+    const textColor = this.props.selected ? 'red' : 'black';
+    return (
+      <TouchableOpacity onPress={this._onPress}>
+        <View>
+          <Text style={{color: textColor}}>{this.props.title}</Text>
+        </View>
+      </TouchableOpacity>
+    );
   }
+}
+
+export default class MultiSelectList extends React.PureComponent {
+  state = {selected: (new Map(): Map<string, boolean>)};
+
+  _keyExtractor = (item, index) => item.id;
+
+  _onPressItem = (id: string) => {
+    // updater functions are preferred for transactional updates
+    this.setState((state) => {
+      // copy the map rather than modifying state.
+      const selected = new Map(state.selected);
+      selected.set(id, !selected.get(id)); // toggle
+      return {selected};
+    });
+  };
+
+  _renderItem = ({item}) => (
+    <MyListItem
+      id={item.id}
+      onPressItem={this._onPressItem}
+      selected={!!this.state.selected.get(item.id)}
+      title={item.title}
+    />
+  );
 
   render() {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Details Screen</Text>
-        <CheckBox
-				    style={{flex: 1, padding: 10}}
-				    onClick={()=>{
-				      this.setState({
-				          isChecked:!this.state.isChecked
-				      })
-				    }}
-				    isChecked={this.state.isChecked}
-				    leftText={"CheckBox"}
-				/>
-
-				<CheckBox
-				    style={{flex: 1, padding: 10}}
-				    onClick={()=>{
-				      this.setState({
-				          isChecked1:!this.state.isChecked1
-				      })
-				    }}
-				    isChecked={this.state.isChecked1}
-				    leftText={"CheckBox"}
-				/>
-				<CheckBox
-				    style={{flex: 1, padding: 10}}
-				    onClick={()=>{
-				      this.setState({
-				          isChecked2:!this.state.isChecked2
-				      })
-				    }}
-				    isChecked={this.state.isChecked2}
-				    leftText={"CheckBox"}
-				/>
-      </View>
+      <FlatList
+        data={
+        	[
+            {id: 1,title: 'Devin'},
+            {id: 2,title: 'Jackson'},
+            {id: 3,title: 'James'},
+            {id: 4,title: 'Joel'},
+            {id: 5,title: 'John'},
+            {id: 6,title: 'Jillian'},
+            {id: 7,title: 'Jimmy'},
+            {id: 8,title: 'Julie'},
+          ]
+        }
+        extraData={this.state}
+        keyExtractor={this._keyExtractor}
+        renderItem={this._renderItem}
+      />
     );
   }
 }
