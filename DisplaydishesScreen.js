@@ -101,8 +101,8 @@ export default class DisplaydishesScreen extends Component {
             onRequestClose={() => {
               Alert.alert('Modal has been closed.');
             }}>
-            <View style={{marginTop: 22}}>
-              <View>
+            <View style={styles.modalContainer}>
+              <ScrollView>
                 <Text>Hello asheesh  World!</Text>
 
 
@@ -147,7 +147,7 @@ export default class DisplaydishesScreen extends Component {
                   accessibilityLabel="Learn more about this purple button"
                 />
 
-              </View>
+              </ScrollView>
             </View>
           </Modal>
         </ScrollView>
@@ -158,6 +158,17 @@ export default class DisplaydishesScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+   modalContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#DCDCDC",
+    borderRadius: 4,
+    borderColor: "#C0C0C0",
+    borderWidth: 2,
+    marginHorizontal: 40,
+    marginVertical: 120
+  },
    addonmargin: {
     margin: 10
    },
