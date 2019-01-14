@@ -18,22 +18,56 @@ export default class DisplaydishesScreen extends Component {
     }
   }
    
-  isIconCheckedOrNot = (addonPrent, item, index) => {
+  isIconCheckedOrNot = (addonParent, item, index) => {
     let selectedLists11 = this.state.selectedLists;
-    let index1 = selectedLists11.indexOf(item.id)
-    if(selectedLists11.includes(item.id)){
+    let index1 = selectedLists11.indexOf(addonParent.id+':'+item.id)
+    if(selectedLists11.includes(addonParent.id+':'+item.id)){
       selectedLists11.splice(index1, 1);
       this.setState({selectedLists: selectedLists11})
     }else {            
-      selectedLists11.push(item.id)
+      selectedLists11.push(addonParent.id+':'+item.id)
       this.setState({selectedLists: selectedLists11})
     }
+    console.log(this.state.selectedLists, 'selected lists')
   }
 
   finishAddonSelection = (addonsParents) => {
-    this.setModalVisible(!this.state.modalVisible)
+    // this.setModalVisible(!this.state.modalVisible)
     let selectedLists22 = this.state.selectedLists;
-    console.log(addonsParents, 'aaaaaaaaaaaaaaa')
+    var displayAlert = false; 
+    for (var i = 0; i < addonsParents.length; i++) { 
+      
+      // if (addonsParents[i].min_item < ) {} else {}
+      console.log('min_item:'+addonsParents[i].min_item, 'max_item:'+addonsParents[i].max_item)
+
+        if (addonsParents[i].min_item != null && addonsParents[i].max_item != null) {
+            var count_addons = 0; 
+            selectedLists22.forEach(function(list) {
+                if (parseInt(list.split(":")[0]) == addonsParents[i].id) {
+                  count_addons = count_addons + 1
+                } 
+            });
+            if (count_addons < addonsParents[i].min_item ||  count_addons > addonsParents[i].max_item) {
+              displayAlert = true;
+            } else {
+              // this.setModalVisible(!this.state.modalVisible)
+              // console.log('adoons added successfully')
+            }
+        } else if (addonsParents[i].min_item == null && addonsParents[i].max_item != null) {
+
+        } else if (addonsParents[i].min_item != null && addonsParents[i].max_item == null) {
+
+        } else if (addonsParents[i].min_item == null && addonsParents[i].max_item == null) {
+
+        } 
+    }
+
+    if (displayAlert) {
+      Alert.alert("Please select addons")
+    } else {
+      this.setModalVisible(!this.state.modalVisible)
+    }
+    // console.log(addonsParents.map(x => x.id), 'aaaaaaaaaaaaaaa')
   }
 
 
@@ -42,7 +76,7 @@ export default class DisplaydishesScreen extends Component {
     return(            
       <View >
           <CheckBox
-              isChecked={this.state.selectedLists.includes(item.id)}
+              isChecked={this.state.selectedLists.includes(parentData.id+':'+item.id)}
               onClick={() => this.isIconCheckedOrNot(parentData, item,index)}
           />
           <Text> 
