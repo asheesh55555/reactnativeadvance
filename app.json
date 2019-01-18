@@ -1,6 +1,7 @@
 {
   "expo": {
-    "name": "AwesomeProject2",
+    "name": "AwesomeProject2asheesh",
+    "icon": "https://instantordering-dev.s3.amazonaws.com/uploads/merchant_account/logo/1/1514437197-1385-0002-2314/Curry_heights_LOGO_280p_thumb.jpg",
     "slug": "AwesomeProject2",
     "privacy": "public",
     "sdkVersion": "31.0.0",
@@ -23,7 +24,13 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.yourcompany.yourappname",
       "supportsTablet": true
-    }
+    },
+
+    "android": {
+      "package": "com.yourcompany.yourappname"
+    },
+    "description": ""
   }
 }

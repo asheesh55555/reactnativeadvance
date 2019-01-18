@@ -24,9 +24,24 @@ export default class DisplaydishesScreen extends Component {
     if(selectedLists11.includes(addonParent.id+':'+item.id)){
       selectedLists11.splice(index1, 1);
       this.setState({selectedLists: selectedLists11})
-    }else {            
-      selectedLists11.push(addonParent.id+':'+item.id)
-      this.setState({selectedLists: selectedLists11})
+    }else {
+
+      var count_addons = 0; 
+      selectedLists11.forEach(function(list) {
+          if (parseInt(list.split(":")[0]) == addonParent.id) {
+            count_addons = count_addons + 1
+          } 
+      });
+
+      if (count_addons < addonParent.max_item) {
+        selectedLists11.push(addonParent.id+':'+item.id)
+        this.setState({selectedLists: selectedLists11})
+      } else {
+        Alert.alert("You can select only "+ addonParent.max_item + " addons from this group")
+      }
+
+
+      
     }
     console.log(this.state.selectedLists, 'selected lists')
   }
@@ -199,9 +214,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#DCDCDC",
     borderRadius: 4,
     borderColor: "#C0C0C0",
-    borderWidth: 2,
-    marginHorizontal: 40,
-    marginVertical: 120
   },
    addonmargin: {
     margin: 10
